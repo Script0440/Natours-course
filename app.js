@@ -44,6 +44,7 @@ app.use('/api', limiter);
 // Body parse,reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
 // Data sanitization against NoSQL query injection
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(mongoSanitize());
 
 // Data sanitization agains XSS
@@ -85,7 +86,7 @@ app.use(
 app.use((req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
-    "default-src 'self'; connect-src 'self' http://127.0.0.1:3000; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com",
+    "default-src 'self'; connect-src 'self' http://127.0.0.1:3000 ws://localhost:58461; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com",
   );
   next();
 });
